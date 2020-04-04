@@ -5,16 +5,18 @@ import store from './store'
 import './global'
 import './filters'
 import dayjs from 'dayjs'
+import api from './http/api'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import './bus'
 
 Vue.use(ElementUI)
 Vue.prototype.$dayjs = dayjs
+Vue.prototype.$api = api
 Vue.config.productionTip = false
 
 new Vue({
-  router,
-  store,
-  render: h => h(App)
+    router,
+    store,
+    render: h => h(App)
 }).$mount('#app')

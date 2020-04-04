@@ -5,7 +5,7 @@ export default {
     //     username	用户名	不能为空
     // password	密码	不能为空
     login(params) {
-        return service.post('login', params)
+        return service.post('apis/login', params)
     },
 
     // 用户数据列表
@@ -13,7 +13,7 @@ export default {
     // pagenum	当前页码	不能为空
     // pagesize	每页显示条数	不能为空
     getUserList(query, pagenum, pagesize) {
-        return service.get(`users?query=${query}&pagenum=${pagenum}&pagesize=${pagesize}`)
+        return service.get(`apis/users?query=${query}&pagenum=${pagenum}&pagesize=${pagesize}`)
     },
 
     // 添加用户
@@ -22,20 +22,20 @@ export default {
     // email	邮箱	可以为空
     // mobile	手机号	可以为空
     addUser(params) {
-        return service.post('users', params)
+        return service.post('apis/users', params)
     },
 
     // 修改用户状态
     // uId	用户 ID	不能为空携带在url中
     // type	用户状态	不能为空携带在url中，值为 true 或者 false
     modifyUser(uId, type) {
-        return service.put(`users/${uId}/state/${type}`)
+        return service.put(`apis/users/${uId}/state/${type}`)
     },
 
     // 根据id查询用户
     // id	用户 ID	不能为空
     getUser(id) {
-        return service.get(`users/${id}`)
+        return service.get(`apis/users/${id}`)
     },
 
     // 编辑用户提交
@@ -43,45 +43,45 @@ export default {
     // email	邮箱	可以为空
     // mobile	手机号	可以为空
     editUser(id, params) {
-        return service.put(`users/${id}`, params)
+        return service.put(`apis/users/${id}`, params)
     },
 
     // 删除单个用户
     // id	用户 id	不能为空参数是url参数:id
     delUser(id) {
-        return service.delete(`users/${id}`)
+        return service.delete(`apis/users/${id}`)
     },
 
     // 分配用户角色
     //     id	用户 ID	不能为空参数是url参数:id
     // rid	角色 id	不能为空参数body参数
     allotUser(id, rid) {
-        return service.put(`users/:${id}/role`, rid)
+        return service.put(`apis/users/:${id}/role`, rid)
     },
 
     // 权限管理
     // 所有权限列表
     // type	类型	值 list 或 tree , list 列表显示权限, tree 树状显示权限,参数是url参数:type
     authorityList(type) {
-        return service.get(`rights/${type}`)
+        return service.get(`apis/rights/${type}`)
     },
 
     // 左侧菜单权限
     getMenus() {
-        return service.get('menus')
+        return service.get('apis/menus')
     },
 
     // 角色管理
     // 角色列表
     getRoles() {
-        return service.get('roles')
+        return service.get('apis/roles')
     },
 
     // 添加角色
     //     roleName	角色名称	不能为空
     // roleDesc	角色描述	可以为空
     addRoles(params) {
-        return service.post('roles', params)
+        return service.post('apis/roles', params)
     },
 
     // 根据 ID 查询角色
@@ -307,4 +307,11 @@ export default {
     getReports() {
         return service.get(`reports/type/1`)
     },
+
+    // 百度地图
+    // 天气查询 district_id 区县的行政区划编码
+    getWeather(city) {
+        // return service.get(`map/weather/v1/?district_id=510117&data_type=fc&ak=tLxlTdqn8SPZ4doXT3PClVvVFMt5B3Eo`)
+        return service.get(`map/api?version=v6&appid=66225112&appsecret=NqIwSlx3&vue=1&city=${city}`)
+    }
 }

@@ -1,28 +1,34 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../pages/Home.vue'
-// import Comm from '../views/Comm.vue'
+import Comm from '../pages/comm/Comm.vue'
 
 Vue.use(VueRouter)
 
 const routes = [{
+    path: '/home',
+    // 重定向
+    redirect: '/'
+}, {
+    path: "/",
+    component: Comm,
+    children: [{
         path: '/',
-        name: 'home',
+        name: "home",
         component: Home,
         meta: {
             title: '首页'
         }
-    },
-    {
-        path: '/login',
-        name: 'login',
-        component: () =>
-            import ('../pages/login/Login'),
-        meta: {
-            title: '登录'
-        }
-    },
-]
+    }, ]
+}, {
+    path: '/login',
+    name: 'login',
+    component: () =>
+        import ('../pages/login/Login'),
+    meta: {
+        title: '登录'
+    }
+}, ]
 
 const isPro = process.env.NODE_ENV === 'production'
 
