@@ -13,13 +13,86 @@ const routes = [{
     path: "/",
     component: Comm,
     children: [{
-        path: '/',
-        name: "home",
-        component: Home,
-        meta: {
-            title: '首页'
-        }
-    }, ]
+            path: '/',
+            name: "home",
+            component: Home,
+            meta: {
+                title: '首页'
+            }
+        },
+        {
+            path: '/users/users',
+            name: "users",
+            component: () =>
+                import ('../pages/users/Users'),
+            meta: {
+                title: '用户列表'
+            }
+        },
+        {
+            path: '/rights/roles',
+            name: "roles",
+            component: () =>
+                import ('../pages/rights/Roles'),
+            meta: {
+                title: '权限列表'
+            }
+        },
+        {
+            path: '/rights/rights',
+            name: "rights",
+            component: () =>
+                import ('../pages/rights/Rights'),
+            meta: {
+                title: '用户列表'
+            }
+        },
+        {
+            path: '/goods/goods',
+            name: "goods",
+            component: () =>
+                import ('../pages/goods/Goods'),
+            meta: {
+                title: '商品管理'
+            }
+        },
+        {
+            path: '/goods/params',
+            name: "params",
+            component: () =>
+                import ('../pages/goods/Params'),
+            meta: {
+                title: '分类参数'
+            }
+        },
+        {
+            path: '/goods/categories',
+            name: "categories",
+            component: () =>
+                import ('../pages/goods/Categories'),
+            meta: {
+                title: '商品分类'
+            }
+        },
+        {
+            path: '/orders/orders',
+            name: "orders",
+            component: () =>
+                import ('../pages/orders/Orders'),
+            meta: {
+                title: '订单列表'
+            }
+        },
+        {
+            path: '/reports/reports',
+            name: "reports",
+            component: () =>
+                import ('../pages/reports/Reports'),
+            meta: {
+                title: '数据报表'
+            }
+        },
+    ]
 }, {
     path: '/login',
     name: 'login',

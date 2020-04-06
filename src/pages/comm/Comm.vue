@@ -15,8 +15,13 @@
       </div>
     </div>
     <div class="content flex">
-      <div class="nav-menu" v-if="menus[0]">
-        <el-menu :default-active="active" class="el-menu-vertical-demo" @select="handleSelect">
+      <div class="nav-menu">
+        <el-menu
+          :default-active="active"
+          :unique-opened="true"
+          class="el-menu-vertical-demo"
+          @select="handleSelect"
+        >
           <el-menu-item index="0">
             <i class="el-icon-s-home"></i>
             <span slot="title">首页</span>
@@ -39,7 +44,7 @@
       </div>
       <div class="main">
         <div class="main-title flex a-center">
-          <group></group>
+          <group :activeList="activeList" :actives="active" @send="send" v-if="activeList.length>0"></group>
         </div>
         <router-view></router-view>
       </div>
@@ -59,6 +64,7 @@ export default {
       time: null,
       interval: null,
       city: null,
+      activeList: [],
       navList: [
         { id: 0, authName: "首页", url: "/", icon: "el-icon-user" },
         { id: null, url: "", icon: "el-icon-folder-opened" },
@@ -141,26 +147,22 @@ export default {
       }
       return;
     },
+    send(val) {
+      this.active = val;
+      // console.log(val);
+      let item = this.navList.find(item => item.id == val);
+      this.$router.push(`${item.url}`);
+    },
     // handleOpen(key, keyPath) {
     //   this.active = key;
     // },
     handleSelect(key, keyPath) {
       let id = Number(key);
-      let activeList = this.$store.state.activeList;
-      if (id) {
-        let index = activeList.findIndex(item => item.id === id);
-        if (index === -1) {
-          let a = this.navList.find(item => item.id == id);
-          let b = JSON.parse(JSON.stringify(a));
-          delete b.icon;
-          activeList.push(b);
-          this.$store.state.activeList = activeList;
-          console.log(activeList);
-          // console.log(activeList.push(b));
-        }
-      }
-      // let a = this.navList.find(item => item.id == key);
-      // console.log(a);
+      let item = this.navList.find(item => item.id === id);
+      let a = JSON.parse(JSON.stringify(item));
+      delete a.icon;
+      this.$bus.$emit("send", a);
+      this.$router.push({ path: `${item.url}` });
     },
     async getMenuList() {
       let a = await this.getMenus();
@@ -180,12 +182,30 @@ export default {
             if (items.children.length === 0) {
               this.navList[index].authName = items.authName;
               this.navList[index].id = items.id;
-              this.navList[index].url = `${url}/${items.path}`;
+              this.navList[index].url = `/${url}/${items.path}`;
               index++;
             }
           });
         }
       });
+      let path = this.$route.path;
+      let item = this.navList.find(item => item.url === path);
+      this.active = String(item.id);
+      this.getActive(item);
+    },
+    getActive(item) {
+      if (localStorage.getItem("activeList")) {
+        let activeList = JSON.parse(localStorage.getItem("activeList"));
+        let flage = activeList.findIndex(items => items.id === item.id);
+        if (flage === -1) {
+          delete item.icon;
+          activeList.push(item);
+        }
+        this.activeList = activeList;
+      } else {
+        delete item.icon;
+        this.activeList = [item];
+      }
     }
   },
   beforeMount() {
@@ -197,13 +217,6 @@ export default {
     clearInterval(this.interval);
   },
   mounted() {
-    if (localStorage.getItem("activeList")) {
-      this.$store.state.activeList = JSON.parse(
-        localStorage.getItem("activeList")
-      );
-    } else {
-      this.$store.state.activeList = [this.navList[0]];
-    }
     this.getMenuList();
   },
   watch: {},
@@ -255,6 +268,7 @@ export default {
         margin-bottom: 20px;
         padding-bottom: 10px;
         border-bottom: 1px solid #eee;
+        min-height: 33px;
       }
     }
   }

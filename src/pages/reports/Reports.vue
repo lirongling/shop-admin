@@ -1,21 +1,16 @@
 <template>
-  <div>child1</div>
+  <div>reports</div>
 </template>
 
 <script>
 export default {
-  name: "",
-  props: {},
-  components: {},
   data() {
     return {};
   },
+  components: {},
+  props: {},
   methods: {},
-  mounted() {
-    //  this.$bus.$on('send', data => {
-    //    console.log(data)
-    //  })
-  },
+  mounted() {},
   watch: {},
   computed: {}
 };

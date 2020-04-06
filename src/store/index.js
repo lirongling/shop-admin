@@ -8,7 +8,8 @@ Vue.use(Vuex)
 // 只放公共的状态
 export default new Vuex.Store({
     state: {
-        activeList: []
+        activeList: [],
+        flage: null
     },
     mutations: {},
     actions: {},

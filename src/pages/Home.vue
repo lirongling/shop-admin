@@ -1,43 +1,31 @@
 <template>
-  <div>
-    <el-button type="primary" @click="send">按钮</el-button>
-    <child-one></child-one>
-    <child-two></child-two>
-  </div>
+  <div class="container flex a-center j-center">欢迎来到小爱后台管理系统</div>
 </template>
 
 <script>
-import childOne from '../components/Child1'
-import childTwo from '../components/Child2'
 export default {
-  name: '',
-  props: {
-  },
-  components: {
-    childOne,
-    childTwo
-  },
+  name: "",
+  props: {},
+  components: {},
   data() {
-    return {
-      msg: '我是home组件的数据'
-    }
+    return {};
   },
   methods: {
     send() {
-      this.$bus.$emit('send', this.msg)
+      this.$bus.$emit("send", this.msg);
     }
   },
-  mounted() {
-
-  },
-  watch: {
-
-  },
-  computed: {
-
-  }
-}
+  mounted() {},
+  watch: {},
+  computed: {}
+};
 </script>
 
 <style scoped lang='scss'>
+.container {
+  font-size: 24px;
+  font-weight: 700;
+  position: relative;
+  top: 20%;
+}
 </style>
