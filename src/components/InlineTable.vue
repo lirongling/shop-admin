@@ -33,24 +33,24 @@
       </el-dialog>
     </div>
     <el-table :data="tableDatas" style="width: 100%">
+      <el-table-column type="index" width="50" label="#"></el-table-column>
       <el-table-column
         :label="item.label"
-        width="180"
+        width="200"
         v-for="(item,index) in tableDesc"
         :key="index"
       >
+        <!-- <template slot-scope="scope" v-if="item.prop==='mg_state'"></template> -->
         <template slot-scope="scope">
-          <span v-if="tableIdx===scope.$index">
-            <el-input v-model="scope.row[item.prop]" size="mini" />
+          <span v-if="item.prop==='mg_state'">
+            <el-switch v-model="scope.row[item.prop]"></el-switch>
           </span>
           <span v-else>{{scope.row[item.prop]}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="right">
-        <template slot="header" slot-scope="scope">
-          <el-input v-model="search" size="mini" placeholder="输入关键字搜索" />
-        </template>
+      <el-table-column align="center">
+        <template slot="header" slot-scope="scope">操作</template>
         <template slot-scope="scope">
           <span v-if="tableIdx===scope.$index">
             <el-button size="mini" @click="save(scope.$index, scope.row)">保存</el-button>

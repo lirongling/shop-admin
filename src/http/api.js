@@ -13,7 +13,10 @@ export default {
     // pagenum	当前页码	不能为空
     // pagesize	每页显示条数	不能为空
     getUserList(query, pagenum, pagesize) {
-        return service.get(`apis/users?query=${query}&pagenum=${pagenum}&pagesize=${pagesize}`)
+        if (query) {
+            return service.get(`apis/users?query=${query}&pagenum=${pagenum}&pagesize=${pagesize}`)
+        }
+        return service.get(`apis/users?pagenum=${pagenum}&pagesize=${pagesize}`)
     },
 
     // 添加用户
@@ -56,7 +59,7 @@ export default {
     //     id	用户 ID	不能为空参数是url参数:id
     // rid	角色 id	不能为空参数body参数
     allotUser(id, rid) {
-        return service.put(`apis/users/:${id}/role`, rid)
+        return service.put(`apis/users/${id}/role`, rid)
     },
 
     // 权限管理
@@ -86,34 +89,34 @@ export default {
 
     // 根据 ID 查询角色
     getRole(id) {
-        return service.get(`roles/${id}`)
+        return service.get(`apis/roles/${id}`)
     },
     // 编辑提交角色
     // :id	角色 ID	不能为空携带在url中
     // roleName	角色名称	不能为空
     // roleDesc	角色描述	可以为空
     editRole(id, params) {
-        return service.put(`roles/${id}`, params)
+        return service.put(`apis/roles/${id}`, params)
     },
 
     // 删除角色
     // :id	角色 ID	不能为空携带在url中
     delRole(id) {
-        return service.delete(`roles/${id}`)
+        return service.delete(`apis/roles/${id}`)
     },
 
     // 角色授权
     // :roleId	角色 ID	不能为空携带在url中
     // rids	权限 ID 列表（字符串）	以 , 分割的权限 ID 列表（获取所有被选中、叶子节点的key和半选中节点的key, 包括 1，2，3级节点）
     impowerRole(roleId, rids) {
-        return service.post(`roles/:${roleId}/rights`, rids)
+        return service.post(`apis/roles/${roleId}/rights`, { rids })
     },
 
     // 删除角色指定权限
     //     :roleId	角色 ID	不能为空携带在url中
     // :rightId	权限 ID	不能为空携带在url中
-    delRole(roleId, rightId) {
-        return service.delete(`roles/:${roleId}/rights/${rightId}`)
+    delRoles(roleId, rightId) {
+        return service.delete(`apis/roles/${roleId}/rights/${rightId}`)
     },
 
     // 商品分类管理
@@ -123,7 +126,10 @@ export default {
     // pagenum	当前页码值	【可选参数】如果不传递，则默认获取所有分类
     // pagesize	每页显示多少条数据	【可选参数】如果不传递，则默认获取所有分类
     getCategories(type, pagenum, pagesize) {
-        return service.get(`categories?type=${type}&pagenum=${pagenum}&pagesize=${pagesize}`)
+        if (pagenum && pagesize) {
+            return service.get(`apis/categories?type=${type}&pagenum=${pagenum}&pagesize=${pagesize}`)
+        }
+        return service.get(`apis/categories?type=${type}`)
     },
 
     // 添加分类
@@ -131,26 +137,26 @@ export default {
     // cat_name	分类名称	不能为空
     // cat_level	分类层级	不能为空，0表示一级分类；1表示二级分类；2表示三级分类
     addCategory(params) {
-        return service.post(`categories `, params)
+        return service.post(`apis/categories `, params)
     },
 
     // 根据 id 查询分类
     // :id	分类 ID	不能为空携带在url中
     getCategory(id) {
-        return service.get(`categories/:${id} `)
+        return service.get(`apis/categories/${id} `)
     },
 
     // 编辑提交分类
     //     :id	分类 ID	不能为空携带在url中
     // cat_name	分类名称	不能为空【此参数，放到请求体中】
     editCategory(id, cat_name) {
-        return service.put(`categories/:${id}?cat_name=${cat_name}`)
+        return service.put(`apis/categories/${id}`, { cat_name })
     },
 
     // 删除分类
     // :id	分类 ID	不能为空
     delCategory(id) {
-        return service.delete(`categories/:${id} `)
+        return service.delete(`apis/categories/${id} `)
     },
 
     // 分类参数管理
@@ -158,7 +164,7 @@ export default {
     //     :id	分类 ID	不能为空携带在url中
     // sel	[only,many]	不能为空,通过 only 或 many 来获取分类静态参数还是动态参数
     getAttributes(id, sel) {
-        return service.get(`categories/:${id}/attributes?sel=${sel}`)
+        return service.get(`apis/categories/${id}/attributes?sel=${sel}`)
     },
 
     // 添加动态参数或者静态属性
@@ -167,14 +173,14 @@ export default {
     // attr_sel	[only,many]	不能为空
     // attr_vals	如果是 many 就需要填写值的选项，以逗号分隔	【可选参数】
     addCategories(id, params) {
-        return service.post(`categories/${id}/attributes`, params)
+        return service.post(`apis/categories/${id}/attributes`, params)
     },
 
     // 删除参数
     // :id	分类 ID	不能为空携带在url中
     // :attrid	参数 ID	不能为空携带在url中
     delCategories(id, attrid) {
-        return service.delete(`categories/${id}/attributes/${attrid}`)
+        return service.delete(`apis/categories/${id}/attributes/${attrid}`)
     },
 
     // 根据 ID 查询参数
@@ -183,7 +189,7 @@ export default {
     // attr_sel	[only,many]	不能为空
     // attr_vals	如果是 many 就需要填写值的选项，以逗号分隔	
     getAttribute(id, attrId, attr_sel, attr_vals) {
-        return service.get(`categories/:${id}/attributes/${attrId}?attr_sel=${attr_sel}&attr_vals=${attr_vals}`)
+        return service.get(`apis/categories/:${id}/attributes/${attrId}?attr_sel=${attr_sel}&attr_vals=${attr_vals}`)
     },
 
     // 编辑提交参数
@@ -193,7 +199,7 @@ export default {
     // attr_sel	属性的类型[many或only]	不能为空，携带在请求体中
     // attr_vals	参数的属性值	可选参数，携带在请求体中
     editAttribute(id, attrId, params) {
-        return service.put(`categories/:${id}/attributes/${attrId}`, params)
+        return service.put(`apis/categories/:${id}/attributes/${attrId}`, params)
     },
 
     // 商品管理
@@ -202,7 +208,10 @@ export default {
     // pagenum	当前页码	不能为空
     // pagesize	每页显示条数	不能为空
     getGoods(query, pagenum, pagesize) {
-        return service.get(`goods?query=${query}&pagenum=${pagenum}&pagesize=${pagesize}`)
+        if (query) {
+            return service.get(`apis/goods?query=${query}&pagenum=${pagenum}&pagesize=${pagesize}`)
+        }
+        return service.get(`apis/goods?pagenum=${pagenum}&pagesize=${pagesize}`)
     },
 
     // 添加商品
@@ -215,13 +224,13 @@ export default {
     // pics	上传的图片临时路径（对象）	可以为空
     // attrs	商品的参数（数组），包含 动态参数 和 静态属性	可以为空
     addGoods(params) {
-        return service.post(`goods`, params)
+        return service.post(`apis/goods`, params)
     },
 
     // 根据 ID 查询商品
     // id	商品 ID	不能为空
     getGood(id) {
-        return service.get(`goods/${id}`)
+        return service.get(`apis/goods/${id}`)
     },
 
     // 编辑提交商品(只做效果,不提交接口)id	商品 ID	不能为空携带在url中
@@ -233,25 +242,25 @@ export default {
     // pics 上传的图片临时路径（ 对象） 可以为空
     // attrs 商品的参数（ 数组） 可以为空
     editGoods(id, params) {
-        return service.put(`goods/${id}`, params)
+        return service.put(`apis/goods/${id}`, params)
     },
 
     // 删除商品
     // id	商品 ID	不能为空
     delGoods(id) {
-        return service.delete(`goods/${id}`)
+        return service.delete(`apis/goods/${id}`)
     },
     // 同步商品图片
     //     id	商品 ID	不能为空携带在url中
     // pics	商品图片集合	如果有 pics_id 字段会保留该图片，如果没有 pics_id 但是有 pic 字段就会新生成图片数据
     updatePics(id, pics) {
-        return service.put(`goods/${id}/pics`, pics)
+        return service.put(`apis/goods/${id}/pics`, pics)
     },
 
     // 同步商品属性
     // id	商品 ID	不能为空携带在url中
     updateAttributes(id) {
-        return service.put(`goods/${id}/attributes`)
+        return service.put(`apis/goods/${id}/attributes`)
     },
 
     // 商品图片处理必须安装 GraphicsMagick
@@ -259,7 +268,7 @@ export default {
     // 图片上传
     // file	上传文件	
     upload(file) {
-        return service.post(`upload`, file)
+        return service.post(`apis/upload`, file)
     },
 
     // 订单管理
@@ -275,7 +284,11 @@ export default {
     // order_fapiao_content	发票内容	可以为空
     // consignee_addr	发货地址	可以为空
     getOrders(query, pagenum, pagesize, user_id, pay_status, is_send, order_fapiao_title, order_fapiao_company, order_fapiao_content, consignee_addr) {
-        return service.get(`orders?query=${query}&pagenum=${pagenum}&pagesize=${pagesize}&user_id=${user_id}&pay_status=${pay_status}&is_send=${is_send}&order_fapiao_title=${order_fapiao_title}&order_fapiao_company=${order_fapiao_company}&order_fapiao_content=${order_fapiao_content}&consignee_addr=${consignee_addr}`)
+        // return service.get(`apis/orders?query=${query}&pagenum=${pagenum}&pagesize=${pagesize}&user_id=${user_id}&pay_status=${pay_status}&is_send=${is_send}&order_fapiao_title=${order_fapiao_title}&order_fapiao_company=${order_fapiao_company}&order_fapiao_content=${order_fapiao_content}&consignee_addr=${consignee_addr}`)
+        if (query) {
+            return service.get(`apis/orders?pagenum=${pagenum}&pagesize=${pagesize}&query=${query}`)
+        }
+        return service.get(`apis/orders?pagenum=${pagenum}&pagesize=${pagesize}`)
     },
 
     // 修改订单状态
@@ -286,26 +299,26 @@ export default {
     // order_number 订单数量
     // pay_status 支付状态 订单状态： 0 未付款、 1 已付款
     editOrders(id, params) {
-        return service.put(`orders/${id}`, params)
+        return service.put(`apis/orders/${id}`, params)
     },
 
     // 查看订单详情
     // id	订单 ID	不能为空
     orderDetails(id) {
-        return service.get(`orders/${id}`)
+        return service.get(`apis/orders/${id}`)
     },
     // 修改地址
 
     // 查看物流信息
     // 供测试的物流单号：1106975712662 或者 804909574412544600
     getKuaidi(id) {
-        return service.get(`kuaidi/${id}`)
+        return service.get(`apis/kuaidi/${804909574412544600}`)
     },
 
     // 数据统计
     // 基于时间统计的折线图
     getReports() {
-        return service.get(`reports/type/1`)
+        return service.get(`apis/reports/type/1`)
     },
 
     // 百度地图

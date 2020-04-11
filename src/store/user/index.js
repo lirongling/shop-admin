@@ -5,11 +5,15 @@ import router from "../../router"
 export default {
     namespaced: true,
     state: {
-        users: []
+        users: [],
+        total: null
     },
     mutations: {
         getUsers(state, data) {
             state.users = data
+        },
+        getTotal(state, data) {
+            state.total = data
         },
     },
     actions: {
@@ -42,6 +46,7 @@ export default {
                 let res = await api.getUserList(query, pagenum, pagesize)
                 if (res.meta.status === 200) {
                     commit("getUsers", res.data.users)
+                    commit("getTotal", res.data.total)
                 } else {
                     Notification({
                         title: res.meta.msg,
@@ -56,12 +61,7 @@ export default {
         async addUser({ commit }, params) {
             try {
                 let res = await api.addUser(params)
-                let arr = this.state.user.users;
                 if (res.meta.status === 201) {
-                    console.log(this.state);
-                    this.state.flage = true
-                    arr.push(res.data)
-                    commit("getUsers", arr)
                     Notification({
                         title: res.meta.msg,
                         type: 'success'
@@ -72,11 +72,95 @@ export default {
                         title: res.meta.msg,
                         type: 'warning'
                     });
-                    this.state.flage = false
+                    return false
                 }
             } catch (err) {
-                this.state.flage = false
+                return false
             }
-        }
+        },
+        // 修改用户状态
+        async modifyUser({ commit }, { uId, type }) {
+            try {
+                let res = await api.modifyUser(uId, type)
+                if (res.meta.status === 200) {
+                    Notification({
+                        title: res.meta.msg,
+                        type: 'success'
+                    });
+                    return true
+                } else {
+                    Notification({
+                        title: res.meta.msg,
+                        type: 'warning'
+                    });
+                    return false
+                }
+            } catch (err) {
+                return false
+            }
+        },
+        // 编辑用户提交
+        async editUser({ commit }, params) {
+            try {
+                let res = await api.editUser(params.id, params)
+                if (res.meta.status === 200) {
+                    Notification({
+                        title: res.meta.msg,
+                        type: 'success'
+                    });
+                    return true
+                } else {
+                    Notification({
+                        title: res.meta.msg,
+                        type: 'warning'
+                    });
+                    return false
+                }
+            } catch (err) {
+                return false
+            }
+        },
+        // 删除单个用户
+        async delUser({ commit }, id) {
+            try {
+                let res = await api.delUser(id)
+                if (res.meta.status === 200) {
+                    Notification({
+                        title: res.meta.msg,
+                        type: 'success'
+                    });
+                    return true
+                } else {
+                    Notification({
+                        title: res.meta.msg,
+                        type: 'warning'
+                    });
+                    return false
+                }
+            } catch (err) {
+                return false
+            }
+        },
+        // 分配用户角色
+        async allotUser({ commit }, { id, rid }) {
+            try {
+                let res = await api.allotUser(id, { rid })
+                if (res.meta.status === 200) {
+                    Notification({
+                        title: res.meta.msg,
+                        type: 'success'
+                    });
+                    return true
+                } else {
+                    Notification({
+                        title: res.meta.msg,
+                        type: 'warning'
+                    });
+                    return false
+                }
+            } catch (err) {
+                return false
+            }
+        },
     },
 }

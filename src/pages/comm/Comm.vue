@@ -79,7 +79,12 @@ export default {
         { id: null, url: "", icon: "el-icon-folder-add" },
         { id: null, url: "", icon: "el-icon-message" },
         { id: null, url: "", icon: "el-icon-position" },
-        { id: null, url: "", icon: "el-icon-odometer" }
+        { id: null, url: "", icon: "el-icon-odometer" },
+        {
+          id: 1,
+          url: "/goods/addGoods",
+          authName: "添加商品"
+        }
       ],
       active: "0"
     };
@@ -93,13 +98,10 @@ export default {
     getTime() {
       let a = new Date().getTime();
       let time1 = this.$dayjs(a).format("YYYY/MM/DD");
-      if (
-        this.weather.date &&
-        time1.slice(-1) !== this.weather.date.slice(-1)
-      ) {
+      let time2 = this.$dayjs(a).format("HH:mm:ss");
+      if (time2.slice(-5) == "00:00") {
         this.getWeather(this.city);
       }
-      let time2 = this.$dayjs(a).format("HH:mm:ss");
       let hour = new Date().getHours();
       if (hour >= 0 && hour < 6) {
         this.time = time1 + " 凌晨 " + time2;
@@ -187,9 +189,14 @@ export default {
             }
           });
         }
+        // console.log(this.navList);
       });
       let path = this.$route.path;
-      let item = this.navList.find(item => item.url === path);
+      let item = {};
+      item = this.navList.find(item => item.url === path);
+      if (item.id === 1) {
+        item = this.navList.find(item => item.url === "/goods/goods");
+      }
       this.active = String(item.id);
       this.getActive(item);
     },
@@ -257,6 +264,7 @@ export default {
     padding-top: 60px;
     height: 100vh;
     .nav-menu {
+      position: fixed;
       padding-left: 40px;
       height: 100%;
       width: 200px;
@@ -264,6 +272,8 @@ export default {
     .main {
       flex: 1;
       padding: 20px;
+      margin-left: 260px;
+      box-sizing: border-box;
       .main-title {
         margin-bottom: 20px;
         padding-bottom: 10px;

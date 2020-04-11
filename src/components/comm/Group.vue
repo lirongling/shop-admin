@@ -154,7 +154,9 @@ export default {
   },
   mounted() {
     this.$bus.$on("send", data => {
-      let flage = this.items.findIndex(item => item.id === data.id);
+      let flage = this.items.findIndex(
+        item => item.id === data.id && item.authName === data.authName
+      );
       if (flage === -1) {
         this.items.push(data);
         localStorage.setItem("activeList", JSON.stringify(this.items));

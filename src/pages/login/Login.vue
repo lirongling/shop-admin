@@ -17,7 +17,7 @@
               <el-input v-model="ruleForm.username"></el-input>
             </el-form-item>
             <el-form-item label="请输入密码" prop="password">
-              <el-input v-model="ruleForm.password"></el-input>
+              <el-input v-model="ruleForm.password" show-password></el-input>
             </el-form-item>
             <div class="remind">特别提醒: 如果您是管理员,请使用管理员账号登录,如果不知道账号,请联系公司人事。</div>
             <div class="btn flex j-center">
